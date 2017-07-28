@@ -43,4 +43,5 @@ model.add(Flatten(input_shape=img_shape))
 model.add(Dense(1))
 
 model.compile(loss="mse", optimizer="adam")
-model.fit(X_train, y_train, validation_split=0.2, nb_epoch=10, batch_size=128, verbose=2)
+model.fit(X_train, y_train, validation_split=0.2, shuffle="True", nb_epoch=10, verbose=2)
+model.save("model.h5")
