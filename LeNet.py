@@ -21,15 +21,23 @@ def readDrivingData(path):
     images = []
     steering_angles = []
     for line in csv_lines:
-        orig_img_path = line[0]
-        local_img_path = os.path.join(DATA_DIR, "IMG", os.path.basename(orig_img_path))
-        image = mpimg.imread(local_img_path)
-        if img_shape is None:
-            img_shape = image.shape
-        images.append(image)
-        angle = float(line[3])
-        steering_angles.append(angle)
-        #print("path:", local_img_path, "  shape:", image.shape, "  steering angle:", angle)
+#        center_img_path, left_img_path, right_img_path = line[0:3]
+        for idx in range(3):
+            orig_img_path = line[idx]
+            local_img_path = os.path.join(DATA_DIR, "IMG", os.path.basename(orig_img_path))
+            image = mpimg.imread(local_img_path)
+            if img_shape is None:
+                img_shape = image.shape
+            images.append(image)
+            angle = float(line[3])
+            if idx == 1:
+                # This an image from the left camera - increase the steering angle
+                angle += 0.2
+            elif idx == 2:
+                # This an image from the right camera - decrease the steering angle
+                angle -= 0.2
+            steering_angles.append(angle)
+            #print("path:", local_img_path, "  shape:", image.shape, "  steering angle:", angle)
 
     return np.array(images), np.array(steering_angles), img_shape
 
@@ -80,9 +88,9 @@ model.add(Convolution2D(6,5,5, activation='relu'))
 model.add(MaxPooling2D())#pool_size=(2, 2)))
 model.add(Flatten())
 model.add(Dense(120, activation='relu'))
-#model.add(Dropout(DROPOUT_RATE))
+model.add(Dropout(0.5))
 model.add(Dense(84, activation='relu'))
-#model.add(Dropout(DROPOUT_RATE))
+model.add(Dropout(0.5))
 model.add(Dense(1))#, activation='softmax'))
 
 
@@ -92,13 +100,16 @@ model.save("model.h5")
 
 print(hist_obj.history.keys())
 
-import matplotlib.pyplot as plt
+import os
 
-plt.plot(hist_obj.history['loss'])
-plt.plot(hist_obj.history['val_loss'])
-plt.title('model mean squared error loss')
-plt.ylabel('mean squared error loss')
-plt.xlabel('epoch')
-plt.legend(['training set', 'validation set'], loc='upper right')
-plt.show()
+if 'DISPLAY' in os.environ:
+    import matplotlib.pyplot as plt
+
+    plt.plot(hist_obj.history['loss'])
+    plt.plot(hist_obj.history['val_loss'])
+    plt.title('model mean squared error loss')
+    plt.ylabel('mean squared error loss')
+    plt.xlabel('epoch')
+    plt.legend(['training set', 'validation set'], loc='upper right')
+    plt.show()
 
