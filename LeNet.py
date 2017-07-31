@@ -96,7 +96,7 @@ model.add(Dense(1))#, activation='softmax'))
 
 model.compile(optimizer="adam", loss="mse")
 hist_obj = model.fit(X_train, y_train, validation_split=0.2, nb_epoch=8, verbose=1, shuffle="True")
-model.save("model.h5")
+model.save("model_LeNet.h5")
 
 print(hist_obj.history.keys())
 
