@@ -7,7 +7,7 @@ import os
 
 def readDrivingData(path):
     csv_lines=[]
-    with open(os.path.join(DATA_DIR, "driving_log.csv")) as csv_file:
+    with open(os.path.join(path, "driving_log.csv")) as csv_file:
         reader = csv.reader(csv_file)
         for line in reader:
             csv_lines.append(line)
@@ -22,7 +22,7 @@ def readDrivingData(path):
 #        center_img_path, left_img_path, right_img_path = line[0:3]
         for idx in range(3):
             orig_img_path = line[idx]
-            local_img_path = os.path.join(DATA_DIR, "IMG", os.path.basename(orig_img_path))
+            local_img_path = os.path.join(path, "IMG", os.path.basename(orig_img_path))
             image = mpimg.imread(local_img_path)
             if img_shape is None:
                 img_shape = image.shape
@@ -50,15 +50,20 @@ def augmentDrivingData(X_train, y_train):
     return np.array(X_aug), np.array(y_aug)
 
 
+if False:
+    X_drive2, y_drive2, img_shape = readDrivingData('./data2')
+    print("X_drive.shape:", X_drive2.shape, "  y_drive.shape:", y_drive2.shape)
 
-X_drive2, y_drive2, img_shape = readDrivingData('./data2')
-print("X_drive.shape:", X_drive2.shape, "  y_drive.shape:", y_drive2.shape)
+    X_drive3, y_drive3, _ = readDrivingData('./data3')
+    print("X_drive.shape:", X_drive3.shape, "  y_drive.shape:", y_drive3.shape)
 
-X_drive3, y_drive3, _ = readDrivingData('./data3')
-print("X_drive.shape:", X_drive3.shape, "  y_drive.shape:", y_drive3.shape)
+    X_drive = np.concatenate([X_drive2, X_drive3])
+    y_drive = np.concatenate([y_drive2, y_drive3])
 
-X_drive = np.concatenate([X_drive2, X_drive3])
-y_drive = np.concatenate([y_drive2, y_drive3])
+else:
+    X_drive, y_drive, _ = readDrivingData('./data3')
+
+print("X_drive.shape:", X_drive.shape, "  y_drive.shape:", y_drive.shape)
 
 X_aug, y_aug = augmentDrivingData(X_drive, y_drive)
 print("X_aug.shape:", X_aug.shape, "  y_aug.shape:", y_aug.shape)
