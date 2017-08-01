@@ -5,8 +5,6 @@ import matplotlib.image as mpimg
 import numpy as np
 import os
 
-DATA_DIR='./data2'
-
 def readDrivingData(path):
     csv_lines=[]
     with open(os.path.join(DATA_DIR, "driving_log.csv")) as csv_file:
@@ -32,10 +30,10 @@ def readDrivingData(path):
             angle = float(line[3])
             if idx == 1:
                 # This an image from the left camera - increase the steering angle
-                angle += 0.2
+                angle += 0.4
             elif idx == 2:
                 # This an image from the right camera - decrease the steering angle
-                angle -= 0.2
+                angle -= 0.4
             steering_angles.append(angle)
             #print("path:", local_img_path, "  shape:", image.shape, "  steering angle:", angle)
 
@@ -53,8 +51,14 @@ def augmentDrivingData(X_train, y_train):
 
 
 
-X_drive, y_drive, img_shape = readDrivingData(DATA_DIR)
-print("X_drive.shape:", X_drive.shape, "  y_drive.shape:", y_drive.shape)
+X_drive2, y_drive2, img_shape = readDrivingData('./data2')
+print("X_drive.shape:", X_drive2.shape, "  y_drive.shape:", y_drive2.shape)
+
+X_drive3, y_drive3, _ = readDrivingData('./data3')
+print("X_drive.shape:", X_drive3.shape, "  y_drive.shape:", y_drive3.shape)
+
+X_drive = np.concatenate([X_drive2, X_drive3])
+y_drive = np.concatenate([y_drive2, y_drive3])
 
 X_aug, y_aug = augmentDrivingData(X_drive, y_drive)
 print("X_aug.shape:", X_aug.shape, "  y_aug.shape:", y_aug.shape)

@@ -9,7 +9,7 @@ git config --global --add alias.co checkout
 git config --global --add user.email "harald.kube@gmx.de"
 git config --global --add user.name  "Harald Kube"
 
-for a in data2.tar.bz2; do
+for a in data2.tar.bz2 data3.tar.bz; do
 	echo Downloading $a
 	wget http://www.hkube.net/udacity/$a
 	tar -xf $a
