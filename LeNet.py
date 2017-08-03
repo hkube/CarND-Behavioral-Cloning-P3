@@ -61,7 +61,7 @@ if False:
     y_drive = np.concatenate([y_drive2, y_drive3])
 
 else:
-    X_drive, y_drive, _ = readDrivingData('./data3')
+    X_drive, y_drive, img_shape = readDrivingData('./data1')
 
 print("X_drive.shape:", X_drive.shape, "  y_drive.shape:", y_drive.shape)
 
