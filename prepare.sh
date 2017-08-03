@@ -19,6 +19,6 @@ wget https://www.dropbox.com/sh/s0mfjceut1kllh8/AADmkdmeL_GLZzZcJvTII9Tka/data1.
 wget https://www.dropbox.com/sh/s0mfjceut1kllh8/AAD5DU1vYjX5ZWy2vKfSTHqUa/data2.tar.bz2?dl=0 -O data2.tar.bz2
 wget https://www.dropbox.com/sh/s0mfjceut1kllh8/AADkZqrR4xwHukkYhvAFCIKba/data3.tar.bz2?dl=0 -O data3.tar.bz2
 
-for a in *.tar.bz2: do
+for a in *.tar.bz2; do
 	tar -xf $a
 done

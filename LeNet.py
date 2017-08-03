@@ -115,14 +115,16 @@ else:
                 for batch_sample in batch_samples:
                     #print("file:", batch_sample[0], "  angle:", batch_sample[2])
                     img = mpimg.imread(batch_sample[0])
+                    angle = batch_sample[2]
                     if batch_sample[1] == 'flip':
                         img = np.fliplr(img)
+                        angle = -angle
                     images.append(img)
-                    angles.append(batch_sample[2])
+                    angles.append(angle)
 
                 yield sklearn.utils.shuffle(np.array(images), np.array(angles))
 
-    train_samples, valid_samples = train_test_split(prepareDrivingDataSamples(['./data1', './data1']), test_size=0.2)
+    train_samples, valid_samples = train_test_split(prepareDrivingDataSamples(['./data1']), test_size=0.2)
 
     train_generator = generator(train_samples, batch_size=32)
     valid_generator = generator(valid_samples, batch_size=32)
