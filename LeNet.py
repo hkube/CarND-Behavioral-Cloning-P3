@@ -7,7 +7,8 @@ import os
 import sklearn
 from click.core import batch
 
-OUTER_CAM_ANGLE_DIFF=0.5
+SIDECAM_BIAS=0.0
+SIDECAM_FACTOR=3
 USE_GENERATOR=True
 
 def readDrivingDataInfo(path):
@@ -96,11 +97,11 @@ else:
             print("Reading driving data from ", d)
             for line in readDrivingDataInfo(d):
                 samples.append((os.path.join(d, "IMG", os.path.basename(line[0])), 'none', float(line[3])))
-                samples.append((os.path.join(d, "IMG", os.path.basename(line[1])), 'none', float(line[3]) + OUTER_CAM_ANGLE_DIFF))
-                samples.append((os.path.join(d, "IMG", os.path.basename(line[2])), 'none', float(line[3]) - OUTER_CAM_ANGLE_DIFF))
+                samples.append((os.path.join(d, "IMG", os.path.basename(line[1])), 'none', float(line[3]) * SIDECAM_FACTOR + SIDECAM_BIAS))
+                samples.append((os.path.join(d, "IMG", os.path.basename(line[2])), 'none', float(line[3]) * SIDECAM_FACTOR - SIDECAM_BIAS))
                 samples.append((os.path.join(d, "IMG", os.path.basename(line[0])), 'flip', float(line[3])))
-                samples.append((os.path.join(d, "IMG", os.path.basename(line[1])), 'flip', float(line[3]) + OUTER_CAM_ANGLE_DIFF))
-                samples.append((os.path.join(d, "IMG", os.path.basename(line[2])), 'flip', float(line[3]) - OUTER_CAM_ANGLE_DIFF))
+                samples.append((os.path.join(d, "IMG", os.path.basename(line[1])), 'flip', float(line[3]) * SIDECAM_FACTOR + SIDECAM_BIAS))
+                samples.append((os.path.join(d, "IMG", os.path.basename(line[2])), 'flip', float(line[3]) * SIDECAM_FACTOR - SIDECAM_BIAS))
         return samples
 
     def generator(samples, batch_size=32):
