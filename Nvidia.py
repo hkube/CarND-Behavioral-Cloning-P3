@@ -9,7 +9,8 @@ from click.core import batch
 
 SIDECAM_BIAS=0.0
 SIDECAM_FACTOR=3
-USE_GENERATOR=True
+NB_EPOCHS=5
+DATA_DIRS=['./data1']
 
 def readDrivingDataInfo(path):
     csv_lines=[]
@@ -62,7 +63,7 @@ def generator(samples, batch_size=32):
 
             yield sklearn.utils.shuffle(np.array(images), np.array(angles))
 
-train_samples, valid_samples = train_test_split(prepareDrivingDataSamples(['./data1']), test_size=0.2)
+train_samples, valid_samples = train_test_split(prepareDrivingDataSamples(DATA_DIRS), test_size=0.2)
 
 train_generator = generator(train_samples, batch_size=32)
 valid_generator = generator(valid_samples, batch_size=32)
@@ -100,12 +101,9 @@ model.add(Dense(1))
 
 
 model.compile(optimizer="adam", loss="mse")
-if not USE_GENERATOR:
-    hist_obj = model.fit(X_train, y_train, validation_split=0.2, nb_epoch=8, verbose=1, shuffle="True")
-else:
-    hist_obj = model.fit_generator(train_generator, samples_per_epoch=len(train_samples), \
-                                   validation_data=valid_generator, nb_val_samples=len(valid_samples), \
-                                   nb_epoch=8, verbose=1)
+hist_obj = model.fit_generator(train_generator, samples_per_epoch=len(train_samples), \
+                               validation_data=valid_generator, nb_val_samples=len(valid_samples), \
+                               nb_epoch=NB_EPOCHS, verbose=1)
 model.save("model_Nvidia.h5")
 
 print(hist_obj.history.keys())
