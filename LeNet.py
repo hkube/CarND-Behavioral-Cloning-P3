@@ -174,7 +174,7 @@ print(hist_obj.history.keys())
 
 import os
 
-if 'DISPLAY' in os.environ:
+if False: #'DISPLAY' in os.environ:
     import matplotlib.pyplot as plt
 
     plt.plot(hist_obj.history['loss'])

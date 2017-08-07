@@ -10,7 +10,7 @@ from click.core import batch
 SIDECAM_BIAS=0.0
 SIDECAM_FACTOR=3
 NB_EPOCHS=5
-DATA_DIRS=['./data1']
+DATA_DIRS=['./data2']
 
 def readDrivingDataInfo(path):
     csv_lines=[]
